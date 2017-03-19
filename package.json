@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/tabone/webrtc-server#readme",
   "dependencies": {
+    "hat": "0.0.3",
+    "sillyname": "^0.1.0",
     "ws": "^2.2.1"
   }
 }
