@@ -27,6 +27,9 @@ module.exports = {
       this.broadcast('user-offline', newUser)
     })
 
+    // Listen for messages sent by the user.
+    socket.on('message', onmessage.bind(this, newUser))
+
     // Initialize user.
     newUser.init(socket)
 
@@ -63,4 +66,65 @@ function sendOnlineUsersList (socket) {
   Object.keys(this.users).forEach(key => users.push(self.users[key]))
 
   socket.send(JSON.stringify({ type: 'users', data: users }))
+}
+
+/**
+ * Function invoked when a user sends a message to the WebSocket server.
+ * @this   {Object} Manager instance.
+ * @param  {String} user    The author of the message.
+ * @param  {String} message The message sent by the user
+ */
+function onmessage (user, message) {
+  const payload = JSON.parse(message)
+
+  switch (payload.type) {
+    case 'ice': return sendICE.call(this, user, payload.data)
+    case 'offer': return sendOffer.call(this, user, payload.data)
+    case 'answer': return sendAnswer.call(this, user, payload.data)
+  }
+}
+
+/**
+ * Function used to send an RTC ICE Candidate to the specified user.
+ * @param  {String} user The author of the message.
+ * @param  {Object} data Ice Candidate info.
+ */
+function sendICE (user, data) {
+  this.users[data.user].socket.send(JSON.stringify({
+    type: 'ice',
+    data: {
+      user,
+      ice: data.ice
+    }
+  }))
+}
+
+/**
+ * Function used to send an RTC Offer to the specified user.
+ * @param  {String} user The author of the message.
+ * @param  {Object} data RTC Offer info.
+ */
+function sendOffer (user, data) {
+  this.users[data.user].socket.send(JSON.stringify({
+    type: 'offer',
+    data: {
+      user,
+      description: data.description
+    }
+  }))
+}
+
+/**
+ * Function used to send an RTC Answer to the specified user.
+ * @param  {String} user The author of the message.
+ * @param  {Object} data RTC Answer info.
+ */
+function sendAnswer (user, data) {
+  this.users[data.user].socket.send(JSON.stringify({
+    type: 'answer',
+    data: {
+      user,
+      description: data.description
+    }
+  }))
 }
