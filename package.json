@@ -1,0 +1,22 @@
+{
+  "name": "webrtc-server",
+  "version": "0.1.0",
+  "description": "WebRTC Signalling Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tabone/webrtc-server.git"
+  },
+  "author": "Luca Tabone <taboneluca3@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tabone/webrtc-server/issues"
+  },
+  "homepage": "https://github.com/tabone/webrtc-server#readme",
+  "dependencies": {
+    "ws": "^2.2.1"
+  }
+}
